@@ -1,20 +1,20 @@
-from tkinter import *
+﻿from tkinter import *
 import tkinter
 import tkinter.font
 from tkinter import messagebox
 
 global player
-global player_money_1
-global player_money_2
-global player_money_3
-global player_money_4
-global player_money_5
+global player_tot_money
+global num #입력받은 주 개수 값
 
-player_money_1 = [10000]
+num = 0
+
+#플레이어 지갑
+player_tot_money = [[10000,0,0,0,0,0,0,0,0,0,0,0,0],[10000,0,0,0,0,0,0,0,0,0,0,0,0],[10000,0,0,0,0,0,0,0,0,0,0,0,0],[10000],0,0,0,0,0,0,0,0,0,0,0,0,[10000,0,0,0,0,0,0,0,0,0,0,0,0]] 
 
 root = tkinter.Tk()
 root.title("독보기 주식게임")
-root.geometry("570x950+670+20")
+root.geometry("570x950+230+20")
 root.iconbitmap('money.ico')
 root['bg'] = '#404040'
 
@@ -22,14 +22,54 @@ font_1=tkinter.font.Font(family="Black Han Sans", size=26)
 font_2=tkinter.font.Font(family="Rix열정도", size=35)
 font_3=tkinter.font.Font(family="카카오 Regular", size=16)
 
-#command=lambda:[player_window(), player_1()] <-- 함수 여러개 사용
+#돈 한글로 표시하는 법
+def get_kor_amount_string(num_amount, ndigits_round=0, str_suffix='원'):
+    """숫자를 자릿수 한글단위와 함께 리턴한다 """
+    assert isinstance(num_amount, int) and isinstance(ndigits_round, int)
+    assert num_amount >= 1, '최소 1원 이상 입력되어야 합니다'
+    ## 일, 십, 백, 천, 만, 십, 백, 천, 억, ... 단위 리스트를 만든다.
+    maj_units = ['만', '억', '조', '경', '해', '자', '양', '구', '간', '정', '재', '극'] # 10000 단위
+    units     = [' '] # 시작은 일의자리로 공백으로하고 이후 십, 백, 천, 만...
+    for mm in maj_units:
+        units.extend(['십', '백', '천']) # 중간 십,백,천 단위
+        units.append(mm)
+    
+    list_amount = list(str(round(num_amount, ndigits_round))) # 라운딩한 숫자를 리스트로 바꾼다
+    list_amount.reverse() # 일, 십 순서로 읽기 위해 순서를 뒤집는다
+    
+    str_result = '' # 결과
+    num_len_list_amount = len(list_amount)
+    
+    for i in range(num_len_list_amount):
+        str_num = list_amount[i]
+        # 만, 억, 조 단위에 천, 백, 십, 일이 모두 0000 일때는 생략
+        if num_len_list_amount >= 9 and i >= 4 and i % 4 == 0 and ''.join(list_amount[i:i+4]) == '0000':
+            continue
+        if str_num == '0': # 0일 때
+            if i % 4 == 0: # 4번째자리일 때(만, 억, 조...)
+                str_result = units[i] + str_result # 단위만 붙인다
+        elif str_num == '1': # 1일 때
+            if i % 4 == 0: # 4번째자리일 때(만, 억, 조...)
+                str_result = str_num + units[i] + str_result # 숫자와 단위를 붙인다
+            else: # 나머지자리일 때
+                str_result = units[i] + str_result # 단위만 붙인다
+        else: # 2~9일 때
+            str_result = str_num + units[i] + str_result # 숫자와 단위를 붙인다
+    str_result = str_result.strip() # 문자열 앞뒤 공백을 제거한다 
+    if len(str_result) == 0:
+        return None
+    if not str_result[0].isnumeric(): # 앞이 숫자가 아닌 문자인 경우
+        str_result = '1' + str_result # 1을 붙인다
+    return str_result + str_suffix # 접미사를 붙인다
+
+#command=lambda:[player_window(), player_1()] <-- 함수 여러개 사용 
 
 #플레이어 지정
 def player_1():
     player = "1"
     player_=Tk()
     player_.title("주식 매수")
-    player_.geometry("690x750+610+60")
+    player_.geometry("690x750+1000+60")
     player_.iconbitmap('money.ico')
     player_['bg'] = '#404040'
 
@@ -80,9 +120,9 @@ def player_1():
     def show_me_the_money(self): #주가 가격 얼마인지 보여주는 함수
         menu_ = listbox.curselection()
         menu = int(menu_[0])
-        hoho = str(stock_money[menu])
-        pr_money = hoho + "₩"
-        show_money.configure(text = "1주: "+pr_money)
+        #hoho = str(stock_money[menu])
+        #pr_money = hoho + "₩"
+        show_money.configure(text = "1주: "+get_kor_amount_string(stock_money[menu]))
     
     show_money = Label(player_, text="1주: "+pr_money, fg="orange", font=font_p, bg="#404040")
     show_money.pack()
@@ -99,17 +139,18 @@ def player_1():
     #blank_p.pack()
 
     global money_2
-    money_2= "0₩"
+    money_2= "0원"
 
     def calculate_money(): #주가 가격 얼마인지 보여주는 함수
         global ca_num
+        global menu_
         menu_ = listbox.curselection()
         num = int(input_text.get()) #입력받은 값
+        #if num == 0:
+            
         menu = int(menu_[0]) #선택된 항목
         ca_num = int(stock_money[menu]) * num #총 결과
-        hoho = str(ca_num)
-        money_2 = hoho + "₩"
-        show_money_ls.configure(text = "가격: "+money_2) #출력 값 실시간변경
+        show_money_ls.configure(text = "가격: "+get_kor_amount_string(ca_num)) #출력 값 실시간변경
 
     btn_choose = Button(player_, text="계산", font=tkinter.font.Font(player_, family="카카오 Bold", size=15), command=calculate_money) #계산 버튼
     btn_choose.pack()
@@ -117,12 +158,16 @@ def player_1():
     show_money_ls = Label(player_, text="가격:"+money_2, fg="white", font=font_p, bg="#404040") #게산된 값 출력
     show_money_ls.pack()
 
-    player_money = Label(player_, text="재산:"+str(player_money_1[0])+"₩", fg="#9DD84B", font=font_p, bg="#404040")
+    player_money = Label(player_, text="재산:"+get_kor_amount_string(player_tot_money[0][0]), fg="#9DD84B", font=font_p, bg="#404040")
     player_money.pack()
 
     def buy_stock():
-        player_money_1[0] = player_money_1[0] - ca_num
-        player_money.configure(text = "재산: "+str(player_money_1[0])+"₩")
+        #player_.wm_attributes("-topmost", 1)
+        player_tot_money[0][0] = player_tot_money[0][0] - ca_num
+        #if player_money[0][0]
+        player_money.configure(text = "재산: "+get_kor_amount_string(player_tot_money[0][0]))
+        player_tot_money[0][menu_[0]] =  player_tot_money[0][menu_[0]] + num
+        print("산 주식 개수:"+str(player_tot_money[0][menu_[0]]))
         tkinter.messagebox.showinfo("매입","매입이 정상적으로 완료되었습니다!")
 
 
@@ -228,10 +273,10 @@ btn_p3.grid(row=5,column=5)
 
 
 btn_p4 = Button(root, text="학생4",  width=6, height=1, font=font_1,command=player_4)
-btn_p4.place(x=130,y=200)
+btn_p4.place(x=130,y=250)
 
 btn_p5 = Button(root, text="학생5", width=6, height=1, font=font_1,command=player_5)
-btn_p5.place(x=305, y=200)
+btn_p5.place(x=305, y=250)
 
 btn_setting = Button(root, text="  설정  ", font=font_3)
 btn_setting.place(x=480, y=880)
