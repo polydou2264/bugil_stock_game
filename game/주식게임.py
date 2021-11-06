@@ -10,11 +10,11 @@ global num #입력받은 주 개수 값
 num = 0
 
 #플레이어 지갑
-player_tot_money = [[10000,0,0,0,0,0,0,0,0,0,0,0,0],[10000,0,0,0,0,0,0,0,0,0,0,0,0],[10000,0,0,0,0,0,0,0,0,0,0,0,0],[10000],0,0,0,0,0,0,0,0,0,0,0,0,[10000,0,0,0,0,0,0,0,0,0,0,0,0]] 
+player_tot_money = [[100000,0,0,0,0,0,0,0,0,0,0,0,0],[10000,0,0,0,0,0,0,0,0,0,0,0,0],[10000,0,0,0,0,0,0,0,0,0,0,0,0],[10000],0,0,0,0,0,0,0,0,0,0,0,0,[10000,0,0,0,0,0,0,0,0,0,0,0,0]] 
 
 root = tkinter.Tk()
 root.title("독보기 주식게임")
-root.geometry("570x950+230+20")
+root.geometry("750x950+220+20")
 root.iconbitmap('money.ico')
 root['bg'] = '#404040'
 
@@ -65,8 +65,7 @@ def get_kor_amount_string(num_amount, ndigits_round=0, str_suffix='원'):
 #command=lambda:[player_window(), player_1()] <-- 함수 여러개 사용 
 
 #플레이어 지정
-def player_1():
-    player = "1"
+def player(player):
     player_=Tk()
     player_.title("주식 매수")
     player_.geometry("690x750+1000+60")
@@ -77,7 +76,7 @@ def player_1():
     blank_p.pack()
 
     font_p = tkinter.font.Font(player_, family="Rix열정도", size=23)
-    player_num = Label(player_, text="학생1", fg="orange", font=tkinter.font.Font(player_, family="Rix열정도", size=31), bg="#404040")
+    player_num = Label(player_, text="학생"+str(player+1), fg="orange", font=tkinter.font.Font(player_, family="Rix열정도", size=31), bg="#404040")
     player_num.pack()
 
     blank_p = Label(player_, text="", width=5, bg="#404040")
@@ -134,6 +133,7 @@ def player_1():
 
     input_text = Entry(player_, width=5, font=font_p) #주식 개수 입력 받기
     input_text.pack()
+    input_text.insert(END, "0")
 
     blank_p = Label(player_, text="", height=1, bg="#404040") #공백
     #blank_p.pack()
@@ -146,7 +146,6 @@ def player_1():
         global menu_
         menu_ = listbox.curselection()
         num = int(input_text.get()) #입력받은 값
-        #if num == 0:
             
         menu = int(menu_[0]) #선택된 항목
         ca_num = int(stock_money[menu]) * num #총 결과
@@ -158,17 +157,26 @@ def player_1():
     show_money_ls = Label(player_, text="가격:"+money_2, fg="white", font=font_p, bg="#404040") #게산된 값 출력
     show_money_ls.pack()
 
-    player_money = Label(player_, text="재산:"+get_kor_amount_string(player_tot_money[0][0]), fg="#9DD84B", font=font_p, bg="#404040")
+    player_money = Label(player_, text="재산:"+get_kor_amount_string(player_tot_money[player][0]), fg="#9DD84B", font=font_p, bg="#404040")
     player_money.pack()
 
     def buy_stock():
+        global ca_num
         #player_.wm_attributes("-topmost", 1)
-        player_tot_money[0][0] = player_tot_money[0][0] - ca_num
+        player_tot_money[player][0] = player_tot_money[player][0] - ca_num
         #if player_money[0][0]
-        player_money.configure(text = "재산: "+get_kor_amount_string(player_tot_money[0][0]))
-        player_tot_money[0][menu_[0]] =  player_tot_money[0][menu_[0]] + num
-        print("산 주식 개수:"+str(player_tot_money[0][menu_[0]]))
-        tkinter.messagebox.showinfo("매입","매입이 정상적으로 완료되었습니다!")
+        player_money.configure(text = "재산: "+get_kor_amount_string(player_tot_money[player][0]))
+        player_tot_money[player][menu_[0]] =  player_tot_money[player][menu_[0]] + num
+        money_p1.configure(text=get_kor_amount_string(player_tot_money[player][0]))
+
+        if ca_num == 0:
+            tkinter.messagebox.showerror("매입","매입이 정상적으로 완료하지 못했습니다.")
+        else:
+            tkinter.messagebox.showinfo("매입","매입이 정상적으로 완료되었습니다!")
+            input_text.delete(0,"end")
+            input_text.insert(END, "0")
+            show_money_ls.configure(text = "가격: 0원")
+            ca_num = 0
 
 
 
@@ -178,62 +186,6 @@ def player_1():
 
 
 
-    player_.mainloop()
-
-def player_2():
-    player = "2"
-    player_=Tk()
-    player_.title("주식 매수")
-    player_.geometry("570x750+670+60")
-    player_['bg'] = '#404040'
-
-
-    player_num = Label(player_, text="학생2")
-    player_num.pack()
-
-    
-    player_.mainloop()
-
-def player_3():
-    player = "2"
-    player_=Tk()
-    player_.title("주식 매수")
-    player_.geometry("570x750+670+60")
-    player_['bg'] = '#404040'
-
-
-    player_num = Label(player_, text="학생3")
-    player_num.pack()
-
-    
-    player_.mainloop()
-
-def player_4():
-    player = "4"
-    player_=Tk()
-    player_.title("주식 매수")
-    player_.geometry("570x750+670+60")
-    player_['bg'] = '#404040'
-
-
-    player_num = Label(player_, text="학생4")
-    player_num.pack()
-
-    
-    player_.mainloop()
-
-def player_5():
-    player = "5"
-    player_=Tk()
-    player_.title("주식 매수")
-    player_.geometry("570x750+670+60")
-    player_['bg'] = '#404040'
-
-
-    player_num = Label(player_, text="학생5")
-    player_num.pack()
-
-    
     player_.mainloop()
 
 root.resizable(False, False)
@@ -250,42 +202,60 @@ blank_4 = Label(root, text="", width=5, bg="#404040")
 blank_4.grid(column=0, row=4)
 
 title = Label(root, text="독보기 주식 게임", fg="orange", font=tkinter.font.Font(family="Rix열정도", size=35),bg="#404040")
-title.place(x="115",y="5")
+title.place(x="205",y="5")
 
 blank_3 = Label(root, text="", width=1, bg="#404040") #오른쪽1 여백
 blank_3.grid(row=5, column=0)
 
-btn_p1 = Button(root, text="학생1", width=6, height=1, font=font_1, command=player_1)
+#플레이어가 가지고 있는 주식 개수 확인 함수
+def check_money(player):
+    check_money=Tk()
+    check_money.title("보유 주식 확인")
+    check_money.geometry("690x750+1000+60")
+    check_money.iconbitmap('money.ico')
+    check_money['bg'] = '#404040'
+
+    player
+
+
+#학생1
+btn_p1 = Button(root, text="학생1", width=6, height=1, font=font_1, command=lambda:[player(0)])
 btn_p1.grid(row=5,column=1)
-
-blank_3 = Label(root, text="", width=1, bg="#404040") #오른쪽2 여백
+blank_3 = Label(root, text="", width=1, bg="#404040") #오른쪽3 여백
 blank_3.grid(row=5, column=2)
-
-btn_p2 = Button(root, text="학생2", width=6, height=1, font=font_1,command=player_2)
-btn_p2.grid(row=5,column=3)
+money_p1 = Button(root, text=get_kor_amount_string(player_tot_money[0][0]), fg="#9DD84B", font=tkinter.font.Font(root, family="Rix열정도", size=22), bg="#404040", activebackground="#404040", activeforeground = "#9DD84B")
+money_p1.grid(row=5,column=3)
 
 blank_3 = Label(root, text="", width=1, bg="#404040") #오른쪽3 여백
-blank_3.grid(row=5, column=4)
+blank_3.grid(row=6, column=1)
 
-btn_p3 = Button(root, text="학생3",  width=6, height=1, font=font_1,command=player_3)
-btn_p3.grid(row=5,column=5)
+#학생2
+btn_p2 = Button(root, text="학생2", width=6, height=1, font=font_1,command=lambda:[player(1)])
+btn_p2.grid(row=7,column=1)
 
+blank_3 = Label(root, text="", width=1, bg="#404040") #오른쪽3 여백
+blank_3.grid(row=8, column=1)
 
+#학생3
+btn_p3 = Button(root, text="학생3",  width=6, height=1, font=font_1,command=lambda:[player(2)])
+btn_p3.grid(row=9,column=1)
 
-btn_p4 = Button(root, text="학생4",  width=6, height=1, font=font_1,command=player_4)
-btn_p4.place(x=130,y=250)
+blank_3 = Label(root, text="", width=1, bg="#404040") #오른쪽3 여백
+blank_3.grid(row=10, column=1)
 
-btn_p5 = Button(root, text="학생5", width=6, height=1, font=font_1,command=player_5)
-btn_p5.place(x=305, y=250)
+#학생4
+btn_p4 = Button(root, text="학생4",  width=6, height=1, font=font_1,command=lambda:[player(3)])
+btn_p4.grid(row=11,column=1)
+
+blank_3 = Label(root, text="", width=1, bg="#404040") #오른쪽3 여백
+blank_3.grid(row=12, column=1)
+
+#학생5
+btn_p5 = Button(root, text="학생5", width=6, height=1, font=font_1,command=lambda:[player(4)])
+btn_p5.grid(row=13,column=1)
 
 btn_setting = Button(root, text="  설정  ", font=font_3)
-btn_setting.place(x=480, y=880)
-
-
-
-
-
-
+btn_setting.place(x=660, y=890)
 
 
 
