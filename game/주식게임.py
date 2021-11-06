@@ -2,6 +2,7 @@
 import tkinter
 import tkinter.font
 from tkinter import messagebox
+import tkinter.ttk
 
 global player
 global player_tot_money
@@ -10,11 +11,11 @@ global num #입력받은 주 개수 값
 num = 0
 
 #플레이어 지갑
-player_tot_money = [[100000,0,0,0,0,0,0,0,0,0,0,0,0],[10000,0,0,0,0,0,0,0,0,0,0,0,0],[10000,0,0,0,0,0,0,0,0,0,0,0,0],[10000],0,0,0,0,0,0,0,0,0,0,0,0,[10000,0,0,0,0,0,0,0,0,0,0,0,0]] 
+player_tot_money = [[100000,0,0,0,0,0,0,0,0,0,0,0,0],[10000,0,0,0,0,0,0,0,0,0,0,0,0],[10000,0,0,0,0,0,0,0,0,0,0,0,0],[10000,0,0,0,0,0,0,0,0,0,0,0,0],[10000,0,0,0,0,0,0,0,0,0,0,0,0]]
 
 root = tkinter.Tk()
 root.title("독보기 주식게임")
-root.geometry("750x950+220+20")
+root.geometry("750x950+180+20")
 root.iconbitmap('money.ico')
 root['bg'] = '#404040'
 
@@ -215,7 +216,24 @@ def check_money(player):
     check_money.iconbitmap('money.ico')
     check_money['bg'] = '#404040'
 
-    player
+    player_num = Label(check_money, text="학생"+str(player+1), fg="orange", font=tkinter.font.Font(check_money, family="Rix열정도", size=31), bg="#404040")
+    player_num.pack()
+
+    treeview=tkinter.ttk.Treeview(check_money, columns=["one", "two","three"], displaycolumns=["one","two","three"])
+    treeview.pack()
+
+    treeview.column("#0", width=180,)
+    treeview.heading("#0", text="주식 종목", font=tkinter.font.Font(check_money, family="Rix열정도", size=31), fg="black")
+
+    treeview.column("#1", width=100, anchor="center")
+    treeview.heading("one", text="보유수", anchor="center")
+
+
+
+
+
+
+
 
 
 #학생1
@@ -223,7 +241,7 @@ btn_p1 = Button(root, text="학생1", width=6, height=1, font=font_1, command=la
 btn_p1.grid(row=5,column=1)
 blank_3 = Label(root, text="", width=1, bg="#404040") #오른쪽3 여백
 blank_3.grid(row=5, column=2)
-money_p1 = Button(root, text=get_kor_amount_string(player_tot_money[0][0]), fg="#9DD84B", font=tkinter.font.Font(root, family="Rix열정도", size=22), bg="#404040", activebackground="#404040", activeforeground = "#9DD84B")
+money_p1 = Button(root, text=get_kor_amount_string(player_tot_money[0][0]), fg="#9DD84B", font=tkinter.font.Font(root, family="Rix열정도", size=22), bg="#404040", activebackground="#404040", activeforeground = "#9DD84B", command=lambda:[check_money(0)])
 money_p1.grid(row=5,column=3)
 
 blank_3 = Label(root, text="", width=1, bg="#404040") #오른쪽3 여백
