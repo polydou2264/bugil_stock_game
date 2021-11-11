@@ -4,13 +4,23 @@ import tkinter.font
 from tkinter import messagebox
 import tkinter.ttk
 import numpy as np
+import os
+import sys
 
 global player
 global player_tot_money
 global num #입력받은 주 개수 값
 
-#stock_money = np.zeros((12,8))
-#stock_money.astype(np.int32)
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
 
 year = int(2013)
 stock_money = [[100,110,120,130,140,150,160,170],[80,90,110,120,130,140,150,160],[80,90,110,120,130,140,150,160],[80,90,110,120,130,140,150,160], [80,90,110,120,130,140,150,160],[80,90,110,120,130,140,150,160],[80,90,110,120,130,140,150,160],[80,90,110,120,130,140,150,160],[80,90,110,120,130,140,150,160],[80,90,110,120,130,140,150,160],[80,90,110,120,130,140,150,160],[80,90,110,120,130,140,150,160]]
@@ -28,8 +38,9 @@ while i<5:
 
 root = tkinter.Tk()
 root.title("독보기 주식게임")
+#photo = PhotoImage(file=resource_path('money.ico'))
 root.geometry("750x950+180+20")
-root.iconbitmap('money.ico')
+root.iconbitmap(resource_path('money.ico'))
 root['bg'] = '#404040'
 
 font_1=tkinter.font.Font(family="Black Han Sans", size=26)
