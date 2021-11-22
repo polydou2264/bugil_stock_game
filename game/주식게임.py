@@ -20,7 +20,7 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
-
+stock_name = ["씨젠", "삼성바이오로직스", "삼성", "애플", "LG화학", "롯데케미칼", "GS칼텍스", "SK이노베이션", "한미약품", "녹십자", "농심", "오뚜기"]
 
 year = int(2013)
 stock_money = [[220000,670000,1466000,604000,911000,640000,514000,627000],[280000,318000,430000,282000,38000,211500,217000,401500],[130500,124000,256500,139500,226000,119500,137000,406000], [139087,68523,672098,263768,550312,367032,265281,383000],[171000,127000,86000,172000,154000,204000,199000,260500],[55000,46000,41000,56000,66000,61000,52000,45000],[143000,232000,289000,340000,364000,430000,319000,186000],[230000,303000,127000,215000,426000,447500,283500,1050000],[157000,290000,262000,287000,421000,376000,676000,1260000], [28200,248000,256000,362000,563000,387000,565000,810000], [0,0,0,150000,370000,330000,270000,830000], [20000,16000,29000,18000,14000,8000,15000,130000]]
@@ -179,7 +179,7 @@ def player_buy(player):
         #pr_money = hoho + "₩"
         show_money.configure(text = "1주: "+get_kor_amount_string(stock_money[menu][year-2013]))
     
-    show_money = Label(player_, text="1주: "+pr_money, fg="orange", font=font_p, bg="#404040")
+    show_money = Label(player_, text="1주: "+pr_money, fg   ="orange", font=font_p, bg="#404040")
     show_money.pack()
 
     listbox.bind("<<ListboxSelect>>", show_me_the_money) #휠
@@ -228,18 +228,18 @@ def player_buy(player):
                 tkinter.messagebox.showerror("매입 오류","매입이 정상적으로 완료하지 못했습니다.")
             else:
                 player_tot_money[player][0] = player_tot_money[player][0] - ca_num
-                i=0
+                i=1
                 tot = 0
-
-                real_money[player] = real_money[player]+ int(tot)
             
                 player_money.configure(text = "남은 현금: "+get_kor_amount_string(player_tot_money[player][0]))
                 player_tot_money[player][menu+1] =  player_tot_money[player][menu+1] + num
 
                 while i<12:
-                    tot_1 = int(player_tot_money[player][i+1]) * int(stock_money[i][year-2013])
+                    tot_1 = int(player_tot_money[player][i]) * int(stock_money[i-1][year-2013])
                     tot = tot + tot_1
                     i = i+1
+                
+                real_money[player] = player_tot_money[player][0] + int(tot)
 
                 if player == 0:
                     money_p1.configure(text=get_kor_amount_string(real_money[player]))
@@ -374,6 +374,7 @@ def player_sell(player):
         if ca_num_ == 0:
             tkinter.messagebox.showerror("매도 오류","매입이 정상적으로 완료하지 못했습니다.")
         else:
+            print(ca_num_)
             player_tot_money[player][0] = player_tot_money[player][0] + ca_num_
             i=0
             tot = 0
@@ -423,12 +424,8 @@ def player_sell(player):
             show_money_ls1.configure(text = "가격: 0원")
             ca_num_ = 0
 
-
-
     buy_button = Button(player_1, text="       매도       ", font = tkinter.font.Font(player_1, family="카카오 Bold", size=20), command=sell_stock, height=3) #매입 버튼
     buy_button.place(x=100, y=500)
-
-
 
     player_1.mainloop()
 
@@ -479,15 +476,63 @@ def check_money(player):
 
     treeview.column("#4", width=100, anchor="center")
     treeview.heading("#4", text="수익률", anchor="center")
+
+    b=0
+    
+    while b<12:
+        if player_tot_money[player][b+1] != 0:
+            treeview.insert('', 'end', text=str(stock_name[b]), values=(stock_name))
+
+        b = b + 1
+    
+    treeview.insert('', 'end', text="Parent", values=("한화", 1000, 49, 9995, "45%"), iid=0)
+
+    i=0
+
     check_money.mainloop()
 
 
+def next_year():
+    global year
+    if year == 2019:
+        year = year + 1
+        btn_year.configure(text = "게임종료", font = tkinter.font.Font(family="Black Han Sans", size=30))
+    
+    elif year == 2020:
+        tkinter.messagebox.showinfo("게임 종료", "프로그램을 종료해주세요!")
+    
+    else:
+        year = year + 1
+    
+    i=0
+    gg=0
+    tot=0
+    while gg<5:
+        while i<12:
+            tot_1 = int(player_tot_money[gg][i+1]) * int(stock_money[i][year-2013])
+            tot = tot + tot_1
+            real_money[gg] = tot + player_tot_money[gg][0]
+            i = i + 1
+        tot = 0
+        print("플레이어"+str(gg)+": "+str(real_money[gg]))
+        i=0
+        gg = gg + 1
 
+    money_p1.configure(text = get_kor_amount_string(int(real_money[0])))
+    money_p2.configure(text = get_kor_amount_string(int(real_money[1])))
+    money_p3.configure(text = get_kor_amount_string(int(real_money[2])))
+    money_p4.configure(text = get_kor_amount_string(int(real_money[3])))
+    money_p5.configure(text = get_kor_amount_string(int(real_money[4])))
 
+    show_year.configure(text = str(year)+"년")
 
+#현재 년도
+show_year=Label(root, text = str(year) + "년",fg = "#FFFFFF", font = tkinter.font.Font(family="Black Han Sans", size=50) ,  bg="#404040")
+show_year.place(x=270, y=565)
 
-
-
+#다음년도 버튼
+btn_year = Button(root, text="NEXT YEAR", font = font_1, command=next_year, height=2, width= 10)
+btn_year.place(x=260,y=680)
 
 #학생1
 btn_p1 = Button(root, text="팀1", width=6, height=1, font=font_1, command=lambda:[choose_menu(0)])
