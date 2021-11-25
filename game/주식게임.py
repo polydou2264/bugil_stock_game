@@ -162,7 +162,7 @@ def player_buy(player):
     blank_p.pack()
 
     font_p = tkinter.font.Font(player_, family="Rix열정도", size=23)
-    player_num = Label(player_, text="학생"+str(player+1), fg="orange", font=tkinter.font.Font(player_, family="Rix열정도", size=31), bg="#404040")
+    player_num = Label(player_, text="팀"+str(player+1), fg="orange", font=tkinter.font.Font(player_, family="Rix열정도", size=31), bg="#404040")
     player_num.pack()
 
     blank_p = Label(player_, text="", width=5, bg="#404040")
@@ -334,7 +334,7 @@ def player_sell(player):
     blank_p.pack()
 
     font_p = tkinter.font.Font(player_1, family="Rix열정도", size=23)
-    player_num = Label(player_1, text="학생"+str(player+1), fg="orange", font=tkinter.font.Font(player_1, family="Rix열정도", size=31), bg="#404040")
+    player_num = Label(player_1, text="팀"+str(player+1), fg="orange", font=tkinter.font.Font(player_1, family="Rix열정도", size=31), bg="#404040")
     player_num.pack()
 
     blank_p = Label(player_1, text="", width=5, bg="#404040")
@@ -504,6 +504,82 @@ title.place(x="205",y="5")
 blank_3 = Label(root, text="", width=1, bg="#404040") #오른쪽1 여백
 blank_3.grid(row=5, column=0)
 
+
+#힌트 구매 
+def buy_hint(player):
+    buy_hint = Tk()
+    buy_hint.title("힌트 구매")
+    buy_hint.geometry("600x200+1050+150")
+    buy_hint.iconbitmap(resource_path('money.ico'))
+    buy_hint['bg'] = "#404040"
+
+    player_num = Label(buy_hint, text="힌트 구매(%로 입력하세요)", fg="orange", font=tkinter.font.Font(buy_hint, family="Rix열정도", size=31), bg="#404040")
+    player_num.pack()
+
+    blank_3 = Label(buy_hint, text="", width=1, bg="#404040") #오른쪽3 여백
+    blank_3.pack()
+
+    input_text_ = Entry(buy_hint, width=15, font=tkinter.font.Font(buy_hint, family="Rix열정도", size=23)) #주식 개수 입력 받기
+    input_text_.pack()
+    input_text_.insert(END, "0")
+    blank_3 = Label(buy_hint, text="", width=1, bg="#404040") #오른쪽3 여백
+    blank_3.pack()
+
+    def edit_hit(player):
+
+        real_money[player] =  real_money[player] * (100-int(input_text_.get())) / 100
+
+        money_p1.configure(text = format(int(real_money[0]), ',d')+ "₩")
+        money_p2.configure(text = format(int(real_money[1]), ',d')+ "₩")
+        money_p3.configure(text = format(int(real_money[2]), ',d')+ "₩")
+        money_p4.configure(text = format(int(real_money[3]), ',d')+ "₩")
+        money_p5.configure(text = format(int(real_money[4]), ',d')+ "₩")
+
+        tkinter.messagebox.showinfo("힌트 구매","힌트 구매가 정상적으로 완료되었습니다!")
+
+    btn = Button(buy_hint, text="구매", font=tkinter.font.Font(buy_hint, family="Rix열정도", size=17), width=20, command=lambda:[edit_hit(player)])
+    btn.pack()
+
+
+
+#재산 수정
+def edit(player):
+    edit = Tk()
+    edit.title("재산 수정")
+    edit.geometry("600x200+1050+150")
+    edit.iconbitmap(resource_path('money.ico'))
+    edit['bg'] = "#404040"
+
+    player_num = Label(edit, text="재산 수정", fg="orange", font=tkinter.font.Font(edit, family="Rix열정도", size=31), bg="#404040")
+    player_num.pack()
+
+    blank_3 = Label(edit, text="", width=1, bg="#404040") #오른쪽3 여백
+    blank_3.pack()
+
+    input_text_ = Entry(edit, width=15, font=tkinter.font.Font(edit, family="Rix열정도", size=23)) #주식 개수 입력 받기
+    input_text_.pack()
+    input_text_.insert(END, "0")
+    blank_3 = Label(edit, text="", width=1, bg="#404040") #오른쪽3 여백
+    blank_3.pack()
+
+    def edit_cm(player):
+
+        real_money[player] = int(input_text_.get())
+
+        money_p1.configure(text = format(int(real_money[0]), ',d')+ "₩")
+        money_p2.configure(text = format(int(real_money[1]), ',d')+ "₩")
+        money_p3.configure(text = format(int(real_money[2]), ',d')+ "₩")
+        money_p4.configure(text = format(int(real_money[3]), ',d')+ "₩")
+        money_p5.configure(text = format(int(real_money[4]), ',d')+ "₩")
+
+        tkinter.messagebox.showinfo("Edit","재산 수정이 정상적으로 완료되었습니다!")
+
+    btn = Button(edit, text="Edit", font=tkinter.font.Font(edit, family="Rix열정도", size=17), width=20, command=lambda:[edit_cm(player)])
+    btn.pack()
+
+    
+
+
 #플레이어가 가지고 있는 주식 개수 확인 함수
 def check_money(player):
     check_money=Tk()
@@ -512,7 +588,8 @@ def check_money(player):
     check_money.iconbitmap(resource_path('money.ico'))
     check_money['bg'] = '#404040'
 
-    player_num = Label(check_money, text="학생"+str(player+1), fg="orange", font=tkinter.font.Font(check_money, family="Rix열정도", size=31), bg="#404040")
+
+    player_num = Label(check_money, text="팀"+str(player+1), fg="orange", font=tkinter.font.Font(check_money, family="Rix열정도", size=31), bg="#404040")
     player_num.pack()
 
     treeview=tkinter.ttk.Treeview(check_money, columns=["one", "two","three", "four"], displaycolumns=["one","two","three","four"])
@@ -532,6 +609,12 @@ def check_money(player):
 
     treeview.column("#4", width=100, anchor="center")
     treeview.heading("#4", text="수익률", anchor="center")
+
+    edit_money = Button(check_money, text="Edit", font=tkinter.font.Font(check_money, family="Rix열정도", size=17), width=10, command=lambda:[edit(player)])
+    edit_money.place(x=40, y=650)
+
+    hint_money = Button(check_money, text="Hint", font=tkinter.font.Font(check_money, family="Rix열정도", size=17), width=10, command=lambda:[buy_hint(player)])
+    hint_money.place(x=260, y=650)
 
     b=0
 
@@ -634,6 +717,9 @@ show_year.place(x=270, y=565)
 btn_year = Button(root, text="NEXT YEAR", font = font_1, command=next_year, height=2, width= 10)
 btn_year.place(x=260,y=680)
 
+btn_bkyear = Button(root, text="BACK", font = tkinter.font.Font(family="Black Han Sans", size=17), command=back_year, height=1)
+btn_bkyear.place(x=30,y=850)
+
 #학생1
 btn_p1 = Button(root, text="팀1", width=6, height=1, font=font_1, command=lambda:[choose_menu(0)])
 btn_p1.grid(row=5,column=1)
@@ -682,23 +768,34 @@ blank_3 = Label(root, text="", width=1, bg="#404040") #오른쪽3 여백
 blank_3.grid(row=14, column=1)
 
 #풀 매도 함수
-def sell_all_stock(player):
+def sell_all_stock():
     ca = 0
     i=0
-    while i<12:
-        if player_tot_money[player][i+1] != 0:
-            ca = player_tot_money[player][i+1] * stock_money[i][year-2013]
-            player_tot_money[player][0] = player_tot_money[player][0] + ca
-            player_tot_money[player][i+1] = 0
+    player = 0
 
+    MsgBox = tkinter.messagebox.askquestion ('경고',"풀매수를 진행할까요?",icon = 'warning')
+    if MsgBox == 'yes':
+        while player < 5:
+            while i<12:
+                if player_tot_money[player][i+1] != 0:
+                    ca = player_tot_money[player][i+1] * stock_money[i][year-2013]
+                    player_tot_money[player][0] = player_tot_money[player][0] + ca
+                    player_tot_money[player][i+1] = 0
+
+                print("i:" + str(i))
+                i = i + 1
+            print("player: " + str(player))
+            player = player + 1
+            i=0
+        print("end")
 
 #풀매수 버튼
-btn_buy_all = Button(root, text="ALL매수", width=6, height=1, font=font_1,command=lambda:[choose_menu(4)])
+btn_buy_all = Button(root, text="ALL매수", width=6, height=1, font=font_1,command=sell_all_stock)
 btn_buy_all.grid(row=15,column=1)
 
 btn_setting = Button(root, text="  설정  ", font=font_3)
 btn_setting.place(x=660, y=890)
 
-#정ㅁ말
+#정ㅁ말 tlqkf 드디어 끝낸다
 
 root.mainloop()
