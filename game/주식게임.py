@@ -23,6 +23,8 @@ def resource_path(relative_path):
 #stock_name = ["씨젠", "삼성바이오로직스", "삼성", "애플", "LG화학", "롯데케미칼", "GS칼텍스", "SK이노베이션", "한미약품", "녹십자", "농심", "오뚜기"]
 stock_name = ["오뚜기", "농심", "녹십자", "한미약품", "SK이노베이션", "GS칼텍스", "롯데케미칼", "LG화학", "애플", "삼성", "삼성바이오로직스", "씨젠"]
 
+first_but_stock = [[0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0]]
+
 year = int(2013)
 stock_money = [[220000,670000,1466000,604000,911000,640000,514000,627000],[280000,318000,430000,282000,38000,211500,217000,401500],[130500,124000,256500,139500,226000,119500,137000,406000], [139087,68523,672098,263768,550312,367032,265281,383000],[171000,127000,86000,172000,154000,204000,199000,260500],[55000,46000,41000,56000,66000,61000,52000,45000],[143000,232000,289000,340000,364000,430000,319000,186000],[230000,303000,127000,215000,426000,447500,283500,1050000],[157000,290000,262000,287000,421000,376000,676000,1260000], [28200,248000,256000,362000,563000,387000,565000,810000], [0,0,0,150000,370000,330000,270000,830000], [20000,16000,29000,18000,14000,8000,15000,130000]]
 
@@ -204,9 +206,9 @@ def player_buy(player):
         menu_ = listbox.curselection()
         global num
         num = int(input_text.get()) #입력받은 값
-            
         global menu 
         menu = int(menu_[0]) #선택된 항목
+
         ca_num = int(stock_money[menu][year-2013]) * num #총 결과
         show_money_ls.configure(text = "총 매수 가격: "+get_kor_amount_string(ca_num)) #출력 값 실시간변경
 
@@ -228,19 +230,29 @@ def player_buy(player):
             if ca_num == 0:
                 tkinter.messagebox.showerror("매입 오류","매입이 정상적으로 완료하지 못했습니다.")
             else:
+
                 player_tot_money[player][0] = player_tot_money[player][0] - ca_num
-                i=1
+                i=0
                 tot = 0
             
                 player_money.configure(text = "남은 현금: "+get_kor_amount_string(player_tot_money[player][0]))
+
+                print("SEX")
+
+                #처음 구매 가격 알기
+                if player_tot_money[player][menu+1] == 0:
+                    first_but_stock[player][menu+1] = stock_money[menu][year-2013]
+                    print("saddfasfsdafasdf:")
+
                 player_tot_money[player][menu+1] =  player_tot_money[player][menu+1] + num
 
                 while i<12:
-                    tot_1 = int(player_tot_money[player][i]) * int(stock_money[i-1][year-2013])
+                    tot_1 = int(player_tot_money[player][i+1]) * int(stock_money[i][year-2013])
                     tot = tot + tot_1
                     i = i+1
                 
                 real_money[player] = player_tot_money[player][0] + int(tot)
+                
 
                 if player == 0:
                     money_p1.configure(text=get_kor_amount_string(real_money[player]))
@@ -342,8 +354,7 @@ def player_sell(player):
     global money_3
     money_3= "0원"
 
-    def calculate_money(): #주가 가격 얼마인지 보여주는 함수'
-
+    def calculate_money(): #주가 가격 얼마인지 보여주는 함수 
         global ca_num_
         global menu_1
         menu_1 = listbox_.curselection()
@@ -356,6 +367,7 @@ def player_sell(player):
         else:   
             global menu
             menu = int(menu_1[0]) #선택된 항목
+
             ca_num_ = int(stock_money[menu][year-2013]) * num_ #총 결과
             show_money_ls1.configure(text = "총 매도 가격: "+get_kor_amount_string(ca_num_)) #출력 값 실시간변경
 
@@ -382,6 +394,10 @@ def player_sell(player):
             
             player_money.configure(text = "남은 현금: "+get_kor_amount_string(player_tot_money[player][0]))
             player_tot_money[player][menu+1] =  player_tot_money[player][menu+1] - num_
+
+            #다 팔았을 때 처음 가격 0원
+            if player_tot_money[player][menu] == 0:
+                first_but_stock[player][menu] = 0
 
             while i<12:
                 tot_1 = int(player_tot_money[player][i+1]) * int(stock_money[i][year-2013])
@@ -479,10 +495,21 @@ def check_money(player):
     treeview.heading("#4", text="수익률", anchor="center")
 
     b=0
+
+    #수익률 계산 함수
+    def per(a, b):
+        print("a:"+ str(a))
+        print("b:" + str(b))
+
+        tp = round(b / a * 100, 2)
+        kam = str(tp) + "%"
+
+        return str(kam)
     
     while b<12:
         if player_tot_money[player][b+1] != 0:
-            treeview.insert('', 'end', text=str(stock_name[b]), values=(stock_name))
+            #주식이름/첫 구매 가격/보유 주식 수/현재 금액/수익률
+            treeview.insert('', 'end', text=str(stock_name[b]), values=(str(first_but_stock[player][b+1]), str(player_tot_money[player][b+1]), str(stock_money[b][year-2013]), per(int(first_but_stock[player][b+1]), int(stock_money[b][year-2013]))), iid =0)
 
         b = b + 1
     
