@@ -237,12 +237,9 @@ def player_buy(player):
             
                 player_money.configure(text = "남은 현금: "+get_kor_amount_string(player_tot_money[player][0]))
 
-                print("SEX")
-
                 #처음 구매 가격 알기
                 if player_tot_money[player][menu+1] == 0:
                     first_but_stock[player][menu+1] = stock_money[menu][year-2013]
-                    print("saddfasfsdafasdf:")
 
                 player_tot_money[player][menu+1] =  player_tot_money[player][menu+1] + num
 
@@ -387,7 +384,6 @@ def player_sell(player):
         if ca_num_ == 0:
             tkinter.messagebox.showerror("매도 오류","매입이 정상적으로 완료하지 못했습니다.")
         else:
-            print(ca_num_)
             player_tot_money[player][0] = player_tot_money[player][0] + ca_num_
             i=0
             tot = 0
@@ -498,8 +494,6 @@ def check_money(player):
 
     #수익률 계산 함수
     def per(a, b):
-        print("a:"+ str(a))
-        print("b:" + str(b))
 
         tp = round(b / a * 100, 2)
         kam = str(tp) + "%"
@@ -542,7 +536,6 @@ def next_year():
             real_money[gg] = tot + player_tot_money[gg][0]
             i = i + 1
         tot = 0
-        print("플레이어"+str(gg)+": "+str(real_money[gg]))
         i=0
         gg = gg + 1
 
