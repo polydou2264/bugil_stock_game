@@ -790,7 +790,7 @@ def sell_all_stock():
         print("end")
 
 #풀매수 버튼
-btn_buy_all = Button(root, text="ALL매수", width=6, height=1, font=font_1,command=sell_all_stock)
+btn_buy_all = Button(root, text="ALL매도", width=6, height=1, font=font_1,command=sell_all_stock)
 btn_buy_all.grid(row=15,column=1)
 
 btn_setting = Button(root, text="  설정  ", font=font_3)
