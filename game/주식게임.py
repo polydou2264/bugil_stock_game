@@ -26,8 +26,21 @@ stock_name = ["오뚜기", "농심", "녹십자", "한미약품", "SK이노베�
 first_but_stock = [[0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0]]
 
 year = int(2013)
-stock_money = [[220000,670000,1466000,604000,911000,640000,514000,627000],[280000,318000,430000,282000,38000,211500,217000,401500],[130500,124000,256500,139500,226000,119500,137000,406000], [139087,68523,672098,263768,550312,367032,265281,383000],[171000,127000,86000,172000,154000,204000,199000,260500],[55000,46000,41000,56000,66000,61000,52000,45000],[143000,232000,289000,340000,364000,430000,319000,186000],[230000,303000,127000,215000,426000,447500,283500,1050000],[157000,290000,262000,287000,421000,376000,676000,1260000], [28200,248000,256000,362000,563000,387000,565000,810000], [0,0,0,150000,370000,330000,270000,830000], [20000,16000,29000,18000,14000,8000,15000,130000]]
-
+stock_money = [[220000,670000,1466000,604000,911000,640000,514000,627000],[280000,318000,430000,282000,38000,211500,217000,401500],[130000,124000,256500,139500,226000,119500,137000,406000], [139000,68000,672000,263000,550000,367000,265000,383000],[55000,46000,41000,56000,66000,61000,52000,45000],[171000,127000,86000,172000,154000,204000,199000,260500],[143000,232000,289000,340000,364000,430000,319000,186000],[230000,303000,127000,215000,426000,447500,283500,1050000],[157000,290000,262000,287000,421000,376000,676000,1260000], [28200,248000,256000,362000,563000,387000,565000,810000], [0,0,0,150000,370000,330000,270000,830000], [20000,16000,29000,18000,14000,8000,15000,130000]]
+'''
+    listbox.insert(0,"씨젠")
+    listbox.insert(0,"삼성바이오로직스")
+    listbox.insert(0,"삼성")
+    listbox.insert(0,"애플")
+    listbox.insert(0,"LG화학")
+    listbox.insert(0,"롯데케미칼")
+    listbox.insert(0,"GS칼텍스")
+    listbox.insert(0,"SK이노베이션")
+    listbox.insert(0,"한미약품")
+    listbox.insert(0,"녹십자")
+    listbox.insert(0,"농심")
+    listbox.insert(0,"오뚜기")
+'''
 num = 0
 
 #플레이어 지갑
@@ -49,6 +62,20 @@ root['bg'] = '#404040'
 font_1=tkinter.font.Font(family="Black Han Sans", size=26)
 font_2=tkinter.font.Font(family="Rix열정도", size=35)
 font_3=tkinter.font.Font(family="카카오 Regular", size=16)
+
+
+def krw_to_korean_won(arg): 
+
+    amount = str(arg).replace(',','')
+
+    if int(amount) > 99999999:
+        return '{0}억 {1}만 {2}원'.format(amount[0:-8], amount[-8:-4], amount[-4:])
+    
+    elif int(amount) > 9999:
+        return '{0}만 {1}원'.format(amount[-8:-4], amount[-4:])
+
+    else:
+        return '{0}원'.format(amount[-4:])
 
 #돈 한글로 표시하는 법
 def get_kor_amount_string(num_amount, ndigits_round=0, str_suffix='원'):
@@ -149,6 +176,21 @@ def player_buy(player):
     listbox = Listbox(frame, selectmode="extended", height=6, yscrollcommand = scrollbar.set, font=tkinter.font.Font(family='맑은 고딕', size='4'))
     #바이오, IT, 화학, 에너지, 제약, 식품 
     #총 12개 종목
+    listbox.insert(0,"바이오A") #시젠
+    listbox.insert(0,"바이오B") #삼성바이오
+    listbox.insert(0,"IT_A") #삼성
+    listbox.insert(0,"IT_B") #애플
+    listbox.insert(0,"화학A") #LG화학
+    listbox.insert(0,"화학B") #롯데케미칼
+    listbox.insert(0,"에너지A") #SK이노베이션
+    listbox.insert(0,"에너지B") #GS케미칼
+    listbox.insert(0,"제약A") #한미약품
+    listbox.insert(0,"제약B") #녹십자
+    listbox.insert(0,"식품A") #농심
+    listbox.insert(0,"식품B") #오뚜기
+    listbox.pack()
+
+    '''
     listbox.insert(0,"씨젠")
     listbox.insert(0,"삼성바이오로직스")
     listbox.insert(0,"삼성")
@@ -161,7 +203,7 @@ def player_buy(player):
     listbox.insert(0,"녹십자")
     listbox.insert(0,"농심")
     listbox.insert(0,"오뚜기")
-    listbox.pack()
+'''
 
     scrollbar["command"]=listbox.yview
     frame.pack()
@@ -180,7 +222,7 @@ def player_buy(player):
         menu = int(menu_[0])
         #hoho = str(stock_money[menu])
         #pr_money = hoho + "₩"
-        show_money.configure(text = "1주: "+get_kor_amount_string(stock_money[menu][year-2013]))
+        show_money.configure(text = "1주: "+format(stock_money[menu][year-2013], ',d')+ "₩")
     
     show_money = Label(player_, text="1주: "+pr_money, fg   ="orange", font=font_p, bg="#404040")
     show_money.pack()
@@ -210,7 +252,7 @@ def player_buy(player):
         menu = int(menu_[0]) #선택된 항목
 
         ca_num = int(stock_money[menu][year-2013]) * num #총 결과
-        show_money_ls.configure(text = "총 매수 가격: "+get_kor_amount_string(ca_num)) #출력 값 실시간변경
+        show_money_ls.configure(text = "총 매수 가격: "+format(ca_num, ',d')+ "₩") #출력 값 실시간변경
 
     btn_choose = Button(player_, text="계산", font=tkinter.font.Font(player_, family="카카오 Bold", size=15), command=calculate_money) #계산 버튼
     btn_choose.pack()
@@ -218,7 +260,7 @@ def player_buy(player):
     show_money_ls = Label(player_, text="총 매수 가격: "+money_2, fg="white", font=font_p, bg="#404040") #게산된 값 출력
     show_money_ls.pack()
 
-    player_money = Label(player_, text="재산: "+get_kor_amount_string(player_tot_money[player][0]), fg="#9DD84B", font=font_p, bg="#404040")
+    player_money = Label(player_, text="재산: "+format(player_tot_money[player][0], ',d')+ "₩", fg="#9DD84B", font=font_p, bg="#404040")
     player_money.pack()
 
     def buy_stock():
@@ -235,7 +277,7 @@ def player_buy(player):
                 i=0
                 tot = 0
             
-                player_money.configure(text = "남은 현금: "+get_kor_amount_string(player_tot_money[player][0]))
+                player_money.configure(text = "남은 현금: "+format(player_tot_money[player][0], ',d')+ "₩")
 
                 #처음 구매 가격 알기
                 if player_tot_money[player][menu+1] == 0:
@@ -252,19 +294,19 @@ def player_buy(player):
                 
 
                 if player == 0:
-                    money_p1.configure(text=get_kor_amount_string(real_money[player]))
+                    money_p1.configure(text=format(real_money[player], ',d')+ "₩")
 
                 elif player == 1:
-                    money_p2.configure(text=get_kor_amount_string(real_money[player]))
+                    money_p2.configure(text=format(real_money[player],',d')+ "₩")
     
                 elif player == 2:
-                    money_p3.configure(text=get_kor_amount_string(real_money[player]))
+                    money_p3.configure(text=format(real_money[player], ',d')+ "₩")
 
                 elif player == 3:
-                    money_p4.configure(text=get_kor_amount_string(real_money[player]))
+                    money_p4.configure(text=format(real_money[player], ',d')+ "₩")
 
                 elif player == 4:
-                    money_p5.configure(text=get_kor_amount_string(real_money[player]))
+                    money_p5.configure(text=format(real_money[player], ',d')+ "₩")
                 tkinter.messagebox.showinfo("매입","매입이 정상적으로 완료되었습니다!")
                 input_text.delete(0,"end")
                 input_text.insert(END, "0")
@@ -331,7 +373,7 @@ def player_sell(player):
         menu = int(mm[0])
         #hoho = str(stock_money[menu])
         #pr_money = hoho + "₩"
-        show_money.configure(text = "현재가: "+get_kor_amount_string(stock_money[menu][year-2013]))
+        show_money.configure(text = "현재가: "+ format(stock_money[menu][year-2013], ',d')+ "₩")
     
     show_money = Label(player_1, text="현재가: "+pr_money, fg="orange", font=font_p, bg="#404040")
     show_money.pack()
@@ -366,7 +408,7 @@ def player_sell(player):
             menu = int(menu_1[0]) #선택된 항목
 
             ca_num_ = int(stock_money[menu][year-2013]) * num_ #총 결과
-            show_money_ls1.configure(text = "총 매도 가격: "+get_kor_amount_string(ca_num_)) #출력 값 실시간변경
+            show_money_ls1.configure(text = "총 매도 가격: "+ format(ca_num_,',d')+ "₩") #출력 값 실시간변경
 
     btn_choose = Button(player_1, text="계산", font=tkinter.font.Font(player_1, family="카카오 Bold", size=15), command=calculate_money) #계산 버튼
 
@@ -375,7 +417,7 @@ def player_sell(player):
     show_money_ls1 = Label(player_1, text="총 매도 가격: "+money_3, fg="white", font=font_p, bg="#404040") #게산된 값 출력
     show_money_ls1.pack()
 
-    player_money = Label(player_1, text="보유 현금: "+get_kor_amount_string(player_tot_money[player][0]), fg="#9DD84B", font=font_p, bg="#404040")
+    player_money = Label(player_1, text="보유 현금: "+format(player_tot_money[player][0], ',d')+ "₩", fg="#9DD84B", font=font_p, bg="#404040")
     player_money.pack()
 
     def sell_stock():
@@ -388,7 +430,7 @@ def player_sell(player):
             i=0
             tot = 0
             
-            player_money.configure(text = "남은 현금: "+get_kor_amount_string(player_tot_money[player][0]))
+            player_money.configure(text = "남은 현금: "+format(player_tot_money[player][0], ',d')+ "₩")
             player_tot_money[player][menu+1] =  player_tot_money[player][menu+1] - num_
 
             #다 팔았을 때 처음 가격 0원
@@ -403,19 +445,19 @@ def player_sell(player):
             real_money[player] = player_tot_money[player][0] + int(tot)
 
             if player == 0:
-                money_p1.configure(text=get_kor_amount_string(real_money[player]))
+                money_p1.configure(text=format(real_money[player], ',d')+ "₩")
 
             elif player == 1:
-                money_p2.configure(text=get_kor_amount_string(real_money[player]))
+                money_p2.configure(text=format(real_money[player], ',d')+ "₩")
     
             elif player == 2:
-                money_p3.configure(text=get_kor_amount_string(real_money[player]))
+                money_p3.configure(text=format(real_money[player], ',d')+ "₩")
 
             elif player == 3:
-                money_p4.configure(text=get_kor_amount_string(real_money[player]))
+                money_p4.configure(text=format(real_money[player], ',d')+ "₩")
 
             elif player == 4:
-                money_p5.configure(text=get_kor_amount_string(real_money[player]))
+                money_p5.configure(text=format(real_money[player], ',d')+ "₩")
 
             tkinter.messagebox.showinfo("매도","매도가 정상적으로 완료되었습니다!")
             listbox_.delete(0, 11)
@@ -496,18 +538,19 @@ def check_money(player):
     def per(a, b):
 
         tp = round(b / a * 100, 2)
+        tp = tp - 100
+
         kam = str(tp) + "%"
 
+        
         return str(kam)
     
     while b<12:
         if player_tot_money[player][b+1] != 0:
             #주식이름/첫 구매 가격/보유 주식 수/현재 금액/수익률
-            treeview.insert('', 'end', text=str(stock_name[b]), values=(str(first_but_stock[player][b+1]), str(player_tot_money[player][b+1]), str(stock_money[b][year-2013]), per(int(first_but_stock[player][b+1]), int(stock_money[b][year-2013]))), iid =0)
+            treeview.insert('', 'end', text=str(stock_name[b]), values=(str(first_but_stock[player][b+1]), str(player_tot_money[player][b+1]), str(stock_money[b][year-2013]), per(int(first_but_stock[player][b+1]), int(stock_money[b][year-2013]))), iid =b)
 
         b = b + 1
-    
-    treeview.insert('', 'end', text="Parent", values=("한화", 1000, 49, 9995, "45%"), iid=0)
 
     i=0
 
@@ -539,11 +582,11 @@ def next_year():
         i=0
         gg = gg + 1
 
-    money_p1.configure(text = get_kor_amount_string(int(real_money[0])))
-    money_p2.configure(text = get_kor_amount_string(int(real_money[1])))
-    money_p3.configure(text = get_kor_amount_string(int(real_money[2])))
-    money_p4.configure(text = get_kor_amount_string(int(real_money[3])))
-    money_p5.configure(text = get_kor_amount_string(int(real_money[4])))
+    money_p1.configure(text = format(int(real_money[0]), ',d')+ "₩")
+    money_p2.configure(text = format(int(real_money[1]), ',d')+ "₩")
+    money_p3.configure(text = format(int(real_money[2]), ',d')+ "₩")
+    money_p4.configure(text = format(int(real_money[3]), ',d')+ "₩")
+    money_p5.configure(text = format(int(real_money[4]), ',d')+ "₩")
 
     show_year.configure(text = str(year)+"년")
 
@@ -560,7 +603,7 @@ btn_p1 = Button(root, text="팀1", width=6, height=1, font=font_1, command=lambd
 btn_p1.grid(row=5,column=1)
 blank_3 = Label(root, text="", width=1, bg="#404040") #오른쪽3 여백
 blank_3.grid(row=5, column=2)
-money_p1 = Button(root, text=get_kor_amount_string(real_money[0]), fg="#9DD84B", font=tkinter.font.Font(root, family="Rix열정도", size=22), bg="#404040", activebackground="#404040", activeforeground = "#9DD84B", command=lambda:[check_money(0)], width=24)
+money_p1 = Button(root, text=format(real_money[0], ',d')+ "₩", fg="#9DD84B", font=tkinter.font.Font(root, family="Rix열정도", size=22), bg="#404040", activebackground="#404040", activeforeground = "#9DD84B", command=lambda:[check_money(0)], width=24)
 money_p1.grid(row=5,column=3)
 
 blank_3 = Label(root, text="", width=1, bg="#404040") #오른쪽3 여백
@@ -569,7 +612,7 @@ blank_3.grid(row=6, column=1)
 #학생2
 btn_p2 = Button(root, text="팀2", width=6, height=1, font=font_1,command=lambda:[choose_menu(1)])
 btn_p2.grid(row=7,column=1)
-money_p2 = Button(root, text=get_kor_amount_string(real_money[1]), fg="#9DD84B", font=tkinter.font.Font(root, family="Rix열정도", size=22), bg="#404040", activebackground="#404040", activeforeground = "#9DD84B", command=lambda:[check_money(1)], width=24)
+money_p2 = Button(root, text=format(real_money[1], ',d') + "₩", fg="#9DD84B", font=tkinter.font.Font(root, family="Rix열정도", size=22), bg="#404040", activebackground="#404040", activeforeground = "#9DD84B", command=lambda:[check_money(1)], width=24)
 money_p2.grid(row=7,column=3)
 
 blank_3 = Label(root, text="", width=1, bg="#404040") #오른쪽3 여백
@@ -578,7 +621,7 @@ blank_3.grid(row=8, column=1)
 #학생3
 btn_p3 = Button(root, text="팀3",  width=6, height=1, font=font_1,command=lambda:[choose_menu(2)])
 btn_p3.grid(row=9,column=1)
-money_p3 = Button(root, text=get_kor_amount_string(real_money[2]), fg="#9DD84B", font=tkinter.font.Font(root, family="Rix열정도", size=22), bg="#404040", activebackground="#404040", activeforeground = "#9DD84B", command=lambda:[check_money(2)], width=24)
+money_p3 = Button(root, text=format(real_money[2], ',d') + "₩", fg="#9DD84B", font=tkinter.font.Font(root, family="Rix열정도", size=22), bg="#404040", activebackground="#404040", activeforeground = "#9DD84B", command=lambda:[check_money(2)], width=24)
 money_p3.grid(row=9,column=3)
 
 blank_3 = Label(root, text="", width=1, bg="#404040") #오른쪽3 여백
@@ -587,7 +630,7 @@ blank_3.grid(row=10, column=1)
 #학생4
 btn_p4 = Button(root, text="팀4",  width=6, height=1, font=font_1,command=lambda:[choose_menu(3)])
 btn_p4.grid(row=11,column=1)
-money_p4 = Button(root, text=get_kor_amount_string(real_money[3]), fg="#9DD84B", font=tkinter.font.Font(root, family="Rix열정도", size=22), bg="#404040", activebackground="#404040", activeforeground = "#9DD84B", command=lambda:[check_money(3)], width=24)
+money_p4 = Button(root, text=format(real_money[3], ',d') + "₩", fg="#9DD84B", font=tkinter.font.Font(root, family="Rix열정도", size=22), bg="#404040", activebackground="#404040", activeforeground = "#9DD84B", command=lambda:[check_money(3)], width=24)
 money_p4.grid(row=11,column=3)
 
 blank_3 = Label(root, text="", width=1, bg="#404040") #오른쪽3 여백
@@ -596,14 +639,12 @@ blank_3.grid(row=12, column=1)
 #학생5
 btn_p5 = Button(root, text="팀5", width=6, height=1, font=font_1,command=lambda:[choose_menu(4)])
 btn_p5.grid(row=13,column=1)
-money_p5 = Button(root, text=get_kor_amount_string(real_money[4]), fg="#9DD84B", font=tkinter.font.Font(root, family="Rix열정도", size=22), bg="#404040", activebackground="#404040", activeforeground = "#9DD84B", command=lambda:[check_money(4)], width=24)
+money_p5 = Button(root, text=format(real_money[4], ',d') + "₩", fg="#9DD84B", font=tkinter.font.Font(root, family="Rix열정도", size=22), bg="#404040", activebackground="#404040", activeforeground = "#9DD84B", command=lambda:[check_money(4)], width=24)
 money_p5.grid(row=13,column=3)
 
 btn_setting = Button(root, text="  설정  ", font=font_3)
 btn_setting.place(x=660, y=890)
 
 #정ㅁ말
-
-
 
 root.mainloop()
