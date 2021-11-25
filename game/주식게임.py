@@ -21,12 +21,12 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 #stock_name = ["씨젠", "삼성바이오로직스", "삼성", "애플", "LG화학", "롯데케미칼", "GS칼텍스", "SK이노베이션", "한미약품", "녹십자", "농심", "오뚜기"]
-stock_name = ["오뚜기", "농심", "녹십자", "한미약품", "SK이노베이션", "GS칼텍스", "롯데케미칼", "LG화학", "애플", "삼성", "삼성바이오로직스", "씨젠"]
+stock_name = ["식품B", "식품A", "제약B", "제약A", "에너지B", "에너지A", "화학B", "화학A", "IT_A", "IT_B", "바이오B", "바이오A"]
 
 first_but_stock = [[0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0]]
 
 year = int(2013)
-stock_money = [[220000,670000,1466000,604000,911000,640000,514000,627000],[280000,318000,430000,282000,38000,211500,217000,401500],[130000,124000,256500,139500,226000,119500,137000,406000], [139000,68000,672000,263000,550000,367000,265000,383000],[55000,46000,41000,56000,66000,61000,52000,45000],[171000,127000,86000,172000,154000,204000,199000,260500],[143000,232000,289000,340000,364000,430000,319000,186000],[230000,303000,127000,215000,426000,447500,283500,1050000],[157000,290000,262000,287000,421000,376000,676000,1260000], [28200,248000,256000,362000,563000,387000,565000,810000], [0,0,0,150000,370000,330000,270000,830000], [20000,16000,29000,18000,14000,8000,15000,130000]]
+stock_money = [[220000,670000,1466000,604000,911000,640000,514000,627000],[280000,318000,430000,282000,380000,211500,217000,401500],[130000,124000,256500,139500,226000,119500,137000,406000], [139000,68000,672000,263000,550000,367000,265000,383000],[55000,46000,41000,56000,66000,61000,52000,45000],[171000,127000,86000,172000,154000,204000,199000,260500],[143000,232000,289000,340000,364000,430000,319000,186000],[230000,303000,127000,215000,426000,447500,283500,1050000],[157000,290000,262000,287000,421000,376000,676000,1260000], [282000,248000,256000,362000,563000,387000,565000,810000], [0,0,0,150000,370000,330000,270000,830000], [20000,16000,29000,18000,14000,8000,15000,130000]]
 '''
     listbox.insert(0,"씨젠")
     listbox.insert(0,"삼성바이오로직스")
@@ -178,8 +178,8 @@ def player_buy(player):
     #총 12개 종목
     listbox.insert(0,"바이오A") #시젠
     listbox.insert(0,"바이오B") #삼성바이오
-    listbox.insert(0,"IT_A") #삼성
-    listbox.insert(0,"IT_B") #애플
+    listbox.insert(0,"IT_B") #삼성
+    listbox.insert(0,"IT_A") #애플
     listbox.insert(0,"화학A") #LG화학
     listbox.insert(0,"화학B") #롯데케미칼
     listbox.insert(0,"에너지A") #SK이노베이션
@@ -269,6 +269,7 @@ def player_buy(player):
         if player_tot_money[player][0] < ca_num:
             tkinter.messagebox.showerror("매입 오류","보유 현금이 부족합니다.")
         else:
+
             if ca_num == 0:
                 tkinter.messagebox.showerror("매입 오류","매입이 정상적으로 완료하지 못했습니다.")
             else:
@@ -279,9 +280,14 @@ def player_buy(player):
             
                 player_money.configure(text = "남은 현금: "+format(player_tot_money[player][0], ',d')+ "₩")
 
+                print("ㅇㅇㅇㅇㅁㄴㄻㄴㄹ")
+                print(menu)
+                print(first_but_stock[player][menu])
+                print(stock_money[menu][year-2013])
+
                 #처음 구매 가격 알기
                 if player_tot_money[player][menu+1] == 0:
-                    first_but_stock[player][menu+1] = stock_money[menu][year-2013]
+                    first_but_stock[player][menu] = stock_money[menu][year-2013]
 
                 player_tot_money[player][menu+1] =  player_tot_money[player][menu+1] + num
 
@@ -556,7 +562,7 @@ def check_money(player):
 
     check_money.mainloop()
 
-
+#다음년도 버튼
 def next_year():
     global year
     if year == 2019:
@@ -589,6 +595,34 @@ def next_year():
     money_p5.configure(text = format(int(real_money[4]), ',d')+ "₩")
 
     show_year.configure(text = str(year)+"년")
+
+'''
+#전년도 버튼(실수 방지)
+def back_year():
+    global year
+    year = year - 1
+    
+    i=0
+    gg=0
+    tot=0
+    while gg<5:
+        while i<12:
+            tot_1 = int(player_tot_money[gg][i+1]) * int(stock_money[i][year-2013])
+            tot = tot + tot_1
+            real_money[gg] = tot + player_tot_money[gg][0]
+            i = i + 1
+        tot = 0
+        i=0
+        gg = gg + 1
+
+    money_p1.configure(text = format(int(real_money[0]), ',d')+ "₩")
+    money_p2.configure(text = format(int(real_money[1]), ',d')+ "₩")
+    money_p3.configure(text = format(int(real_money[2]), ',d')+ "₩")
+    money_p4.configure(text = format(int(real_money[3]), ',d')+ "₩")
+    money_p5.configure(text = format(int(real_money[4]), ',d')+ "₩")
+
+    show_year.configure(text = str(year)+"년")
+'''
 
 #현재 년도
 show_year=Label(root, text = str(year) + "년",fg = "#FFFFFF", font = tkinter.font.Font(family="Black Han Sans", size=50) ,  bg="#404040")
