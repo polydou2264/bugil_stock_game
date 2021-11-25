@@ -280,11 +280,6 @@ def player_buy(player):
             
                 player_money.configure(text = "남은 현금: "+format(player_tot_money[player][0], ',d')+ "₩")
 
-                print("ㅇㅇㅇㅇㅁㄴㄻㄴㄹ")
-                print(menu)
-                print(first_but_stock[player][menu])
-                print(stock_money[menu][year-2013])
-
                 #처음 구매 가격 알기
                 if player_tot_money[player][menu+1] == 0:
                     first_but_stock[player][menu] = stock_money[menu][year-2013]
@@ -554,7 +549,7 @@ def check_money(player):
     while b<12:
         if player_tot_money[player][b+1] != 0:
             #주식이름/첫 구매 가격/보유 주식 수/현재 금액/수익률
-            treeview.insert('', 'end', text=str(stock_name[b]), values=(str(first_but_stock[player][b+1]), str(player_tot_money[player][b+1]), str(stock_money[b][year-2013]), per(int(first_but_stock[player][b+1]), int(stock_money[b][year-2013]))), iid =b)
+            treeview.insert('', 'end', text=str(stock_name[b]), values=(str(first_but_stock[player][b]), str(player_tot_money[player][b+1]), str(stock_money[b][year-2013]), per(int(first_but_stock[player][b]), int(stock_money[b][year-2013]))), iid =b)
 
         b = b + 1
 
@@ -565,28 +560,34 @@ def check_money(player):
 #다음년도 버튼
 def next_year():
     global year
-    if year == 2019:
-        year = year + 1
-        btn_year.configure(text = "게임종료", font = tkinter.font.Font(family="Black Han Sans", size=30))
+
+    MsgBox = tkinter.messagebox.askquestion ('경고',"다음년도로 이동할까요?",icon = 'warning')
+    if MsgBox == 'yes':
+        if year == 2019:
+            year = year + 1
+            btn_year.configure(text = "게임종료", font = tkinter.font.Font(family="Black Han Sans", size=30))
     
-    elif year == 2020:
-        tkinter.messagebox.showinfo("게임 종료", "프로그램을 종료해주세요!")
+        elif year == 2020:
+            tkinter.messagebox.showinfo("게임 종료", "프로그램을 종료해주세요!")
     
-    else:
-        year = year + 1
-    
-    i=0
-    gg=0
-    tot=0
-    while gg<5:
-        while i<12:
-            tot_1 = int(player_tot_money[gg][i+1]) * int(stock_money[i][year-2013])
-            tot = tot + tot_1
-            real_money[gg] = tot + player_tot_money[gg][0]
-            i = i + 1
-        tot = 0
+        else:
+            year = year + 1
         i=0
-        gg = gg + 1
+        gg=0
+        tot=0
+        while gg<5:
+            while i<12:
+                tot_1 = int(player_tot_money[gg][i+1]) * int(stock_money[i][year-2013])
+                tot = tot + tot_1
+                real_money[gg] = tot + player_tot_money[gg][0]
+                i = i + 1
+            tot = 0
+            i=0
+            gg = gg + 1
+        
+        
+
+
 
     money_p1.configure(text = format(int(real_money[0]), ',d')+ "₩")
     money_p2.configure(text = format(int(real_money[1]), ',d')+ "₩")
@@ -596,24 +597,25 @@ def next_year():
 
     show_year.configure(text = str(year)+"년")
 
-'''
 #전년도 버튼(실수 방지)
 def back_year():
     global year
-    year = year - 1
     
-    i=0
-    gg=0
-    tot=0
-    while gg<5:
-        while i<12:
-            tot_1 = int(player_tot_money[gg][i+1]) * int(stock_money[i][year-2013])
-            tot = tot + tot_1
-            real_money[gg] = tot + player_tot_money[gg][0]
-            i = i + 1
-        tot = 0
+    if year > 2013:
+        year = year - 1
+    
         i=0
-        gg = gg + 1
+        gg=0
+        tot=0
+        while gg<5:
+            while i<12:
+                tot_1 = int(player_tot_money[gg][i+1]) * int(stock_money[i][year-2013])
+                tot = tot + tot_1
+                real_money[gg] = tot + player_tot_money[gg][0]
+                i = i + 1
+            tot = 0
+            i=0
+            gg = gg + 1
 
     money_p1.configure(text = format(int(real_money[0]), ',d')+ "₩")
     money_p2.configure(text = format(int(real_money[1]), ',d')+ "₩")
@@ -622,7 +624,7 @@ def back_year():
     money_p5.configure(text = format(int(real_money[4]), ',d')+ "₩")
 
     show_year.configure(text = str(year)+"년")
-'''
+
 
 #현재 년도
 show_year=Label(root, text = str(year) + "년",fg = "#FFFFFF", font = tkinter.font.Font(family="Black Han Sans", size=50) ,  bg="#404040")
@@ -675,6 +677,24 @@ btn_p5 = Button(root, text="팀5", width=6, height=1, font=font_1,command=lambda
 btn_p5.grid(row=13,column=1)
 money_p5 = Button(root, text=format(real_money[4], ',d') + "₩", fg="#9DD84B", font=tkinter.font.Font(root, family="Rix열정도", size=22), bg="#404040", activebackground="#404040", activeforeground = "#9DD84B", command=lambda:[check_money(4)], width=24)
 money_p5.grid(row=13,column=3)
+
+blank_3 = Label(root, text="", width=1, bg="#404040") #오른쪽3 여백
+blank_3.grid(row=14, column=1)
+
+#풀 매도 함수
+def sell_all_stock(player):
+    ca = 0
+    i=0
+    while i<12:
+        if player_tot_money[player][i+1] != 0:
+            ca = player_tot_money[player][i+1] * stock_money[i][year-2013]
+            player_tot_money[player][0] = player_tot_money[player][0] + ca
+            player_tot_money[player][i+1] = 0
+
+
+#풀매수 버튼
+btn_buy_all = Button(root, text="ALL매수", width=6, height=1, font=font_1,command=lambda:[choose_menu(4)])
+btn_buy_all.grid(row=15,column=1)
 
 btn_setting = Button(root, text="  설정  ", font=font_3)
 btn_setting.place(x=660, y=890)
