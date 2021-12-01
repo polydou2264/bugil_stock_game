@@ -16,7 +16,7 @@
 
 > ## **기능 설명**  
 > >## 매도
-> > 
+> > ![매도_기능](https://user-images.githubusercontent.com/48638348/144166069-696f1e06-45ab-4a90-9ce7-3753a19ed02f.png)
 
 
 
